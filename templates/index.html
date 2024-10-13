@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление сотрудниками</title>
+</head>
+<body>
+    <h1>Сотрудники</h1>
+    <form method="POST" action="/add">
+        <input type="text" name="familiya" placeholder="Фамилия" maxlength="20" required>
+        <input type="text" name="inmya" placeholder="Имя" maxlength="20" required>
+        <input type="text" name="otchestvo" placeholder="Отчество" maxlength="20">
+        <input type="number" name="Kod_sot" placeholder="Код сотрудника" min="1" max="9999" required>
+        <input type="number" name="Kod_dol" placeholder="Код должности" min="1" max="9999" required>
+        <input type="number" name="Kod_step" placeholder="Код учёной степени" min="1" max="99" required>
+        <input type="number" name="Kod_fac" placeholder="Код факультета" min="1" max="999" required>
+        <input type="number" name="stazh" placeholder="Стаж" min="0" max="99">
+        <input type="number" name="Kod_prin" placeholder="Код принадлежности" min="1" max="999" required>
+        <input type="text" name="kabinet" placeholder="Кабинет" maxlength="5">
+        <input type="number" name="Kod_caf" placeholder="Код кафедры" min="1" max="9999" required>
+        <button type="submit">Добавить сотрудника</button>
+    </form>
+
+    <h2>Список сотрудников</h2>
+    <ul>
+        {% for sotrudnik in sotrudniki %}
+        <li>{{ sotrudnik[0] }} {{ sotrudnik[1] }} {{ sotrudnik[2] }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Удалить сотрудника</h3>
+    <form method="POST" action="/delete">
+        <input type="number" name="employee_id" placeholder="ID сотрудника" required>
+        <button type="submit">Удалить</button>
+    </form>
+
+    <h3>Обновить данные сотрудника</h3>
+    <form method="POST" action="/update">
+        <input type="number" name="employee_id" placeholder="ID сотрудника" required>
+
+        <select name="field" required>
+            <option value="familiya">Фамилия</option>
+            <option value="inmya">Имя</option>
+            <option value="otchestvo">Отчество</option>
+            <option value="Kod_sot">Код сотрудника</option>
+            <option value="Kod_dol">Код должности</option>
+            <option value="Kod_step">Код учёной степени</option>
+            <option value="Kod_fac">Код факультета</option>
+            <option value="stazh">Стаж</option>
+            <option value="Kod_prin">Код принадлежности</option>
+            <option value="kabinet">Кабинет</option>
+            <option value="Kod_caf">Код кафедры</option>
+        </select>
+
+        <input type="text" name="new_value" placeholder="Новое значение" required>
+        <button type="submit">Обновить</button>
+    </form>
+
+    <h3>Просмотр данных таблиц</h3>
+    <form method="POST" action="/view_table">
+        <label for="table">Выберите таблицу:</label>
+        <select name="table" id="table">
+            <option value="Sotrudnik">Таблица сотрудников</option>
+            <option value="Dolzhnosti">Таблица должностей</option>
+            <option value="Stepeni">Таблица учёных степеней</option>
+            <option value="Facultetov">Таблица факультетов</option>
+            <option value="Prinadlezhnosti">Таблица принадлежностей</option>
+            <option value="Cafedri">Таблица кафедр</option>
+        </select>
+        <button type="submit">Просмотреть</button>
+    </form>
+
+    {% if table_data and table_data|length > 0 %}
+    <h3>Данные из таблицы {{ selected_table }}</h3>
+    <table border="1">
+        <tr>
+            {% for column in table_data[0].keys() %}
+            <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in table_data %}
+        <tr>
+            {% for value in row.values() %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Таблица {{ selected_table }} пуста или данные не найдены.</p>
+    {% endif %}
+</body>
+</html>
